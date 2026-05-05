@@ -1,3 +1,8 @@
+---
+name: task-decomposition
+description: Breaks large or ambiguous tasks into concrete, routable subtasks with explicit dependencies and execution order. Use when a task has multiple deliverables, spans specialist domains, or has subtasks that can run in parallel. Outputs a structured decomposition with agent assignments and a capability gap check. Don't use for simple single-step tasks or for clarifying ambiguous requirements — resolve ambiguity before decomposing.
+---
+
 # Task Decomposition
 
 Use this skill to break large or ambiguous tasks into concrete, routable subtasks.

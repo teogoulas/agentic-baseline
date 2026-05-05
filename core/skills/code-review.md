@@ -1,3 +1,8 @@
+---
+name: code-review
+description: Applies a structured multi-domain checklist to review code changes for correctness, security, contracts, test coverage, quality, and operational readiness. Use when reviewing a PR or code change before merge. Escalates any security finding with CVSS ≥ 7.0. Don't use for full security audits (use security-audit), architecture design reviews, or performance profiling.
+---
+
 # Code Review Checklist
 
 Apply this checklist when reviewing any code change. Use `reviewer` agent for structured output.

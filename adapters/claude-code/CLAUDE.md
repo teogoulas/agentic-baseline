@@ -42,12 +42,11 @@ Reference these when performing the relevant task:
 |---|---|
 | Breaking down a large task | `core/skills/task-decomposition.md` |
 | Reviewing code | `core/skills/code-review.md` |
-| Security audit | `core/skills/security-audit.md` |
-| Formatting findings | `core/skills/findings-format.md` |
-| Git operations | `core/skills/git-workflow.md` |
-| API design | `core/skills/api-design.md` |
-| Docker setup | `core/skills/docker-local.md` |
-| Context is getting large | `core/skills/context-compression.md` |
+| Security audit | `core/skills/security-audit/SKILL.md` |
+| Git operations | `core/skills/git-workflow/SKILL.md` |
+| API design | `core/skills/api-design/SKILL.md` |
+| Docker setup | `core/skills/docker-local/SKILL.md` |
+| Context is getting large | `core/skills/context-compression/SKILL.md` |
 | Building or extending an MCP server | `core/skills/mcp-server/SKILL.md` |
 | Authoring or evaluating a skill | `core/skills/skill-creator/SKILL.md` |
 

@@ -1,8 +1,4 @@
-# API Design
-
-Guidelines for designing APIs that are consistent, predictable, and maintainable.
-
----
+# API Design Conventions
 
 ## Core Principles
 
@@ -11,11 +7,8 @@ Guidelines for designing APIs that are consistent, predictable, and maintainable
 - **Fail loudly** — return clear errors, never silent failures
 - **Versioning from day one** — even if v1 is the only version that ever exists
 
----
+## URL Structure
 
-## REST
-
-### URL Structure
 ```
 GET    /resources           — list
 GET    /resources/:id       — get one
@@ -30,7 +23,8 @@ DELETE /resources/:id       — delete
 - Nest only one level deep: `/resources/:id/sub-resources`
 - Use query params for filtering, sorting, pagination — not path params
 
-### Response Shape
+## Response Shape
+
 ```json
 {
   "data": {},
@@ -39,7 +33,7 @@ DELETE /resources/:id       — delete
 }
 ```
 
-Errors:
+Error response:
 ```json
 {
   "data": null,
@@ -51,7 +45,7 @@ Errors:
 }
 ```
 
-### Status Codes
+## Status Codes
 
 | Code | Use |
 |---|---|
@@ -67,13 +61,11 @@ Errors:
 | 429 | Rate limited |
 | 500 | Server error — not the client's fault |
 
----
-
 ## General Rules
 
 - Validate input at the boundary — before it touches business logic
 - Never expose internal IDs, stack traces, or file paths in error responses
-- Authentication before authorization — always check identity first, then permissions
+- Authentication before authorisation — always check identity first, then permissions
 - Rate limiting on all public endpoints
 - Pagination on all list endpoints — never return unbounded collections
 - Document breaking changes before shipping them
