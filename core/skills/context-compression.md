@@ -30,8 +30,33 @@ Always drop:
 
 ## Step 2: Generate the Snapshot
 
-Read `assets/context-snapshot.template.md` and fill in every section.
-Do not leave any section empty — write "none" if there is nothing to record.
+Fill in every section of the following template. Write "none" if a section is empty — do not omit it.
+
+```markdown
+## Context Snapshot — [YYYY-MM-DD HH:MM]
+
+### Task
+[One sentence: what the overall task is]
+
+### Current State
+- [Bullet: what has been completed]
+
+### Active Decisions
+- [Decision and why — 1 line each]
+
+### Open Items
+1. [Next step]
+2. [Step after that]
+
+### Blockers / Escalations
+- [Any unresolved items requiring user input, or "none"]
+
+### Key Files
+- [path/to/file] — [what it is]
+
+### Assumptions
+- [Anything assumed that hasn't been confirmed, or "none"]
+```
 
 ## Step 3: Save and Hand Off
 
@@ -41,5 +66,5 @@ Do not leave any section empty — write "none" if there is nothing to record.
 
 ## Error Handling
 
-- If a decision's rationale is unclear from the context, record the decision and flag it as "rationale unknown — verify before proceeding."
+- If a decision's rationale is unclear, record the decision and flag it as "rationale unknown — verify before proceeding."
 - If open items are ambiguous, escalate before compressing — a compressed context with wrong open items is worse than a full one.

@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Conducts structured security reviews of codebases, configurations, and infrastructure. Use when performing a full security audit, reviewing code for common vulnerability classes, or auditing IaC and dependency manifests. Always outputs findings using the standard format in assets/. Escalates findings with CVSS ≥ 7.0 immediately. Don't use for live penetration testing, exploit development, or routine code reviews unrelated to security (use code-review for that).
+description: Conducts structured security reviews of codebases, configurations, and infrastructure. Use when performing a full security audit, reviewing code for common vulnerability classes, or auditing IaC and dependency manifests. Escalates findings with CVSS ≥ 7.0 immediately. Don't use for live penetration testing, exploit development, or routine code reviews unrelated to security (use code-review for that).
 ---
 
 # Security Audit Methodology
@@ -10,7 +10,7 @@ description: Conducts structured security reviews of codebases, configurations, 
 1. Confirm scope — what is in and out of scope.
 2. Confirm finding destination — where the findings file will be saved.
 3. Confirm escalation threshold — default is CVSS ≥ 7.0.
-4. Read `assets/findings-header.template.md` and open the findings file with the header filled in before starting.
+4. Open the findings file with the header below filled in before starting.
 5. Do a quick architecture pass before diving into code — understand the attack surface first.
 
 ## Phase 1: Attack Surface Mapping
@@ -52,15 +52,52 @@ Review code for vulnerability classes in priority order:
 
 ## Recording Findings
 
-For each finding, read `assets/finding.template.md` and fill in every field.
-Read `references/severity-definitions.md` to assign the correct severity and CVSS range.
+Document every finding immediately using this template:
 
-Document every finding immediately, even if low severity.
+```
+### [SEVERITY] [SHORT-ID] — [Title]
+
+**Severity:** CRITICAL | HIGH | MEDIUM | LOW | INFO
+**CVSS Score:** [0.0–10.0]
+**Category:** [injection | auth | access-control | exposure | config | dependency | crypto | infra]
+**Status:** OPEN | ESCALATED | ACKNOWLEDGED | RESOLVED
+
+**Location:**
+- File: [path/to/file.ext]
+- Line: [line number or range]
+- Component: [function, endpoint, or service name]
+
+**Description:**
+[2-3 sentences: what the vulnerability is and why it exists]
+
+**Impact:**
+[What an attacker could achieve if this is exploited]
+
+**Evidence:**
+[Minimal code snippet or config showing the issue]
+
+**Recommendation:**
+[Specific, actionable fix]
+
+**References:**
+- [CVE or CWE if applicable]
+```
+
 When uncertain: document as a potential finding with reasoning — never silence it.
 
 **If CVSS ≥ 7.0 is found:** stop, document, escalate per `core/skills/escalation-rules.md`. Do not continue until acknowledged.
 
 Never attempt to exploit — document the path an attacker would take, then stop.
+
+## Severity Reference
+
+| Severity | CVSS | Meaning |
+|---|---|---|
+| CRITICAL | 9.0–10.0 | RCE, full auth bypass, data breach risk |
+| HIGH | 7.0–8.9 | Significant impact, likely exploitable — escalate immediately |
+| MEDIUM | 4.0–6.9 | Real risk, harder to exploit or limited impact |
+| LOW | 0.1–3.9 | Minor risk, requires unusual conditions |
+| INFO | 0.0 | Observation, best practice, hardening opportunity |
 
 ## Post-Audit
 
@@ -69,7 +106,21 @@ Never attempt to exploit — document the path an attacker would take, then stop
 3. List action items in priority order (CRITICAL → HIGH → MEDIUM → LOW → INFO).
 4. Save to the agreed location before responding.
 
+## Findings File Header
+
+```
+# Security Findings: [scope]
+**Date:** YYYY-MM-DD
+**Scope:** [what was reviewed]
+**Out of scope:** [what was explicitly excluded]
+**Limitations:** [tools unavailable, areas not fully covered]
+**Total findings:** [N] (CRITICAL: N | HIGH: N | MEDIUM: N | LOW: N | INFO: N)
+
+## Executive Summary
+[One paragraph: overall posture, most significant findings, recommended immediate actions]
+```
+
 ## Error Handling
 
 - If scope is ambiguous, escalate before starting — an audit with undefined scope produces unusable findings.
-- If a dependency scanner is unavailable, note it explicitly in the findings header under "Limitations".
+- If a dependency scanner is unavailable, note it explicitly under "Limitations" in the header.
