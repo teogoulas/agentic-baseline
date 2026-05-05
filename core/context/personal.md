@@ -66,7 +66,7 @@ An AWS serverless platform where farmers upload agronomic files and receive proc
 | cloud-processing-stack | Terraform IaC |
 
 **AWS accounts:** Dev `342895721581` / Prod `359369607705` — both `us-east-2`
-**Full architecture reference:** `/Users/teogo/Dev/docs/SoilSerdem/HUB.md`
+**Full architecture reference:** set `SOILSERDEM_HUB` path in `core/context/personal.local.md`
 
 **Critical gotchas:**
 - GDAL must be installed via conda — pip install fails
