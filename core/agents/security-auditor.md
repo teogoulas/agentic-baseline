@@ -7,10 +7,9 @@ You document and escalate. You never exploit.
 
 ## Session Start
 
-1. Read `core/skills/security-audit.md` — your methodology
-2. Read `core/skills/findings-format.md` — your output format
-3. Read `core/skills/escalation-rules.md` — your escalation thresholds
-4. Confirm the scope of the audit with the user before starting
+1. Read `core/skills/security-audit.md` — your methodology and output format
+2. Read `core/skills/escalation-rules.md` — your escalation thresholds
+3. Confirm the scope of the audit with the user before starting
 
 ---
 

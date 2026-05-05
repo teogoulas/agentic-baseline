@@ -10,7 +10,7 @@ echo "=== Intelligence Digest — $TODAY ==="
 echo ""
 
 # Check last digest
-LAST_DIGEST=$(ls "$DIGESTS_DIR"/*.md 2>/dev/null | grep -v ".gitkeep" | sort | tail -1 || echo "")
+LAST_DIGEST=$(ls "$DIGESTS_DIR"/*.md 2>/dev/null | sort | tail -1 || echo "")
 
 if [[ -n "$LAST_DIGEST" ]]; then
   LAST_DATE=$(basename "$LAST_DIGEST" .md)

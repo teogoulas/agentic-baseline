@@ -79,7 +79,7 @@ if [[ ${#skipped[@]} -gt 0 ]]; then
   echo ""
 fi
 
-# Check if personal.md has unfilled TODOs
+# Check if personal.md has unfilled TODOs (first-time setup)
 TODO_COUNT=$(grep -c "\[TODO" "$PERSONAL_MD" 2>/dev/null || true)
 if [[ "$TODO_COUNT" -gt 0 ]]; then
   echo "========================================"
@@ -87,9 +87,25 @@ if [[ "$TODO_COUNT" -gt 0 ]]; then
   echo "========================================"
   echo ""
   echo "  core/context/personal.md has $TODO_COUNT unfilled TODO(s)."
-  echo "  This is the highest-leverage file — fill it before first use."
+  echo "  Fill it with your identity, stack, and communication style — this file is committed."
   echo ""
   echo "  Run: \$EDITOR core/context/personal.md"
+  echo ""
+fi
+
+# Remind user to create personal.local.md if missing
+LOCAL_MD="$BASELINE_DIR/core/context/personal.local.md"
+if [[ ! -f "$LOCAL_MD" ]]; then
+  echo "========================================"
+  echo " Action Required"
+  echo "========================================"
+  echo ""
+  echo "  core/context/personal.local.md not found."
+  echo "  Create it with machine-specific details (terminal, editor, local paths, active projects)."
+  echo "  It is gitignored and stays on this machine only."
+  echo ""
+  echo "  Run: cp core/context/personal.md core/context/personal.local.md"
+  echo "       \$EDITOR core/context/personal.local.md"
   echo ""
 fi
 

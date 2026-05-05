@@ -39,7 +39,6 @@ When asked to act as a specialist, load the relevant agent file:
 | Breaking down a large task | `core/skills/task-decomposition.md` |
 | Reviewing code | `core/skills/code-review.md` |
 | Security audit | `core/skills/security-audit.md` |
-| Formatting findings | `core/skills/findings-format.md` |
 | Git operations | `core/skills/git-workflow.md` |
 | API design | `core/skills/api-design.md` |
 | Docker setup | `core/skills/docker-local.md` |

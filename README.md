@@ -13,8 +13,14 @@ cd ~/Dev/agentic-baseline
 ./bootstrap.sh
 ```
 
-Then fill in `core/context/personal.md` — that file is the highest-leverage input.
-Everything else is generic until it is filled.
+**First-time setup only:** edit `core/context/personal.md` with your identity, stack, and communication style — this is committed and shared across machines.
+
+**Every machine:** create `core/context/personal.local.md` with environment-specific details (terminal, editor, local paths, active projects). It is gitignored and never committed.
+
+```bash
+cp core/context/personal.md core/context/personal.local.md
+# edit personal.local.md to reflect this machine
+```
 
 ---
 

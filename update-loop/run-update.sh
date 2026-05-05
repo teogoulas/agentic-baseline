@@ -30,27 +30,14 @@ echo "Generating baseline-snapshot.md..."
   echo ""
   echo "---"
   echo ""
-  for f in \
-    "$BASELINE_DIR/core/skills/escalation-rules.md" \
-    "$BASELINE_DIR/core/skills/code-review.md" \
-    "$BASELINE_DIR/core/skills/security-audit.md" \
-    "$BASELINE_DIR/core/skills/task-decomposition.md" \
-    "$BASELINE_DIR/core/skills/git-workflow.md" \
-    "$BASELINE_DIR/core/skills/api-design.md" \
-    "$BASELINE_DIR/core/skills/context-compression.md" \
-    "$BASELINE_DIR/core/agents/orchestrator.md" \
-    "$BASELINE_DIR/core/agents/tool-broker.md" \
-    "$BASELINE_DIR/core/agents/security-auditor.md" \
-    "$BASELINE_DIR/core/context/tool-registry.md"; do
-    if [[ -f "$f" ]]; then
-      echo "## $(basename "$f")"
-      echo ""
-      cat "$f"
-      echo ""
-      echo "---"
-      echo ""
-    fi
-  done
+  while IFS= read -r f; do
+    echo "## $(basename "$f")"
+    echo ""
+    cat "$f"
+    echo ""
+    echo "---"
+    echo ""
+  done < <(find "$BASELINE_DIR/core" -name "*.md" | sort)
 } > "$SNAPSHOT"
 
 echo "Snapshot written to: update-loop/baseline-snapshot.md"

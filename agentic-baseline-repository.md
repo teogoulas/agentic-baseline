@@ -1,17 +1,19 @@
-# Agentic Baseline Repository — Briefing for Claude Code
+# Agentic Baseline Repository — Original Build Brief
 
-## Your Task
+> **Note:** This is the original briefing document used to scaffold the repository. The repo is built.
+> Refer to `README.md` for current documentation. This file is kept as a design record.
+
+## Original Task
 Build a personal agentic engineering baseline repository from scratch.
 This is a tool-agnostic, git-based setup that the user will clone on any machine
 to instantly have their skills, context, and agent definitions ready across
-Claude Code, Codex, GitHub Copilot, and OpenClaw.
+Claude Code, Codex, and GitHub Copilot.
 
 ---
 
 ## What We Know About the User
 
-- **Current tools:** Claude Code (primary), exploring Codex, OpenClaw, Copilot
-- **OpenClaw:** open-source AI agent framework that runs locally; automates multi-step tasks across the user's computer and web services (email, scheduling, web search)
+- **Current tools:** Claude Code (primary), exploring Codex, Copilot
 - **Stack preferences:** Not yet fully defined — scaffold with placeholders, user will fill in
 - **Working style:** Direct, no padding, wants autonomy with clear escalation rules
 - **Location:** Athens, Greece (UTC+3)
@@ -34,11 +36,11 @@ agentic-baseline/
       code-review.md
       task-decomposition.md
       escalation-rules.md
-      findings-format.md
       security-audit.md
       git-workflow.md
       docker-local.md
       context-compression.md
+      mcp-server.md
     /context
       personal.md                   # Preferences, stack, style — with TODOs for user to fill
       permissions-default.md        # Default autonomy rules
@@ -61,9 +63,6 @@ agentic-baseline/
       install.sh
     /copilot
       copilot-instructions.md
-      install.sh
-    /openclaw
-      README.md                     # Maps core skills to OpenClaw's task format
       install.sh
 
   /feedback-loop
@@ -163,8 +162,7 @@ The tool-broker never installs or removes anything autonomously.
 ### `core/agents/security-auditor.md`
 Specialist agent for security review tasks. Should:
 - Know how to read code for common vulnerability classes (injection, auth bypass, insecure defaults, etc.)
-- Apply `core/skills/security-audit.md` and `core/skills/findings-format.md`
-- Always output findings in the standard findings format
+- Apply `core/skills/security-audit.md` — methodology and output format are both defined there
 - Escalate any CVSS ≥ 7.0 finding immediately — do not continue auditing until acknowledged
 - Never attempt to exploit — document and escalate only
 
@@ -225,7 +223,7 @@ A prompt to run alongside the monthly update. Instructs the tool-broker to:
 
 ### `bootstrap.sh`
 Should:
-1. Detect which tools are installed (`claude`, `codex`, `gh`, `openclaw`, etc.)
+1. Detect which tools are installed (`claude`, `codex`, `gh`, etc.)
 2. Run only the relevant adapter `install.sh` scripts for detected tools
 3. Print a summary of what was set up and what was skipped
 4. Remind user to fill in `core/context/personal.md` TODOs if unfilled
@@ -241,9 +239,6 @@ References core context and adds Claude Code-specific config:
 
 ### `adapters/codex/AGENTS.md`
 Same structure as CLAUDE.md but in Codex/AGENTS.md format. Codex supports SKILL.md in `~/.agents/skills/` — install.sh should symlink core skill files there.
-
-### `adapters/openclaw/README.md`
-Maps core skills and agent definitions to OpenClaw's task automation format. OpenClaw is best suited for: multi-step local automation, email and calendar orchestration, web research pipelines. The mapping should clarify which core skills apply to OpenClaw's execution model and which are coding-agent-specific.
 
 ---
 
