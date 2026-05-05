@@ -80,7 +80,7 @@ if [[ ${#skipped[@]} -gt 0 ]]; then
 fi
 
 # Check if personal.md has unfilled TODOs
-TODO_COUNT=$(grep -c "\[TODO" "$PERSONAL_MD" 2>/dev/null || echo 0)
+TODO_COUNT=$(grep -c "\[TODO" "$PERSONAL_MD" 2>/dev/null || true)
 if [[ "$TODO_COUNT" -gt 0 ]]; then
   echo "========================================"
   echo " Action Required"
