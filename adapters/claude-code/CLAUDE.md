@@ -48,6 +48,8 @@ Reference these when performing the relevant task:
 | API design | `core/skills/api-design.md` |
 | Docker setup | `core/skills/docker-local.md` |
 | Context is getting large | `core/skills/context-compression.md` |
+| Building or extending an MCP server | `core/skills/mcp-server/SKILL.md` |
+| Authoring or evaluating a skill | `core/skills/skill-creator/SKILL.md` |
 
 ---
 
