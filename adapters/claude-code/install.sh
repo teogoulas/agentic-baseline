@@ -40,10 +40,8 @@ fi
 echo "  Generated ~/.claude/CLAUDE.md with absolute paths to $BASELINE_DIR"
 
 # --- Repo root CLAUDE.md (relative paths — only useful inside the baseline repo itself) ---
-if [[ ! -f "$BASELINE_DIR/CLAUDE.md" ]]; then
-  cp "$ADAPTER_DIR/CLAUDE.md" "$BASELINE_DIR/CLAUDE.md"
-  echo "  Copied CLAUDE.md to baseline repo root (relative paths)"
-fi
+cp "$ADAPTER_DIR/CLAUDE.md" "$BASELINE_DIR/CLAUDE.md"
+echo "  Regenerated CLAUDE.md at baseline repo root (relative paths)"
 
 echo ""
 echo "  Claude Code adapter installed."
