@@ -17,6 +17,8 @@ description: Generates MCP server tool implementations for a given service and t
 
 ## Step 2: Design the Tool Set
 
+Read `assets/tool-design.template.md` and fill in one block per operation before proceeding.
+
 For each operation:
 
 1. Name the tool in `verb_resource_qualifier` snake_case (e.g., `search_orders`, `get_order`, `submit_payment`).
@@ -54,9 +56,10 @@ Regardless of language:
 
 ## Step 5: Generate the Files
 
-1. Read the asset template for the target language in `assets/`.
-2. Generate one file per concern (tools declaration, service/client, config) following the reference pattern.
-3. Add the tool group to the server's configuration (application.yml, .env, config file) with the feature flag set to `true`.
+Using the completed tool design from Step 2 and the patterns from the reference file read in Step 3:
+
+1. Generate one file per concern (tools declaration, service/client, config) following the reference pattern.
+2. Add the tool group to the server's configuration (application.yml, .env, config file) with the feature flag set to `true`.
 
 ## Step 6: Validate
 

@@ -50,11 +50,12 @@ Follow these steps to generate a skill that adheres to the agentskills.io specif
 When asked to evaluate an existing skill file or directory:
 
 1. Read the skill content in full.
-2. Run `scripts/validate-metadata.py` against the frontmatter `name` and `description`.
-3. Check each item in `references/checklist.md` — mark Pass/Fail.
-4. Identify hallucination gaps: steps where the agent must guess rather than follow a deterministic instruction.
-5. Identify missing progressive disclosure: large inline content that should be in `references/`.
-6. Output a structured report:
+2. Extract `name` and `description` for validation: if the file has YAML frontmatter, use those fields directly. If not, use the first `#` heading as the name (lowercased, spaces replaced with hyphens) and the first non-heading paragraph as the description.
+3. Run `scripts/validate-metadata.py --name "[name]" --description "[description]"`.
+4. Check each item in `references/checklist.md` — mark Pass/Fail.
+5. Identify hallucination gaps: steps where the agent must guess rather than follow a deterministic instruction.
+6. Identify missing progressive disclosure: large inline content that should be in `references/`.
+7. Output a structured report:
    ```
    SKILL EVALUATION: [name]
    Metadata: Pass/Fail — [issues]
