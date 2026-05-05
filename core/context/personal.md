@@ -50,33 +50,7 @@ gitignored — it stays local, never committed. Agents read it first if it exist
 
 ## Active Projects
 
-### SoilSerdem — Agricultural Platform
-An AWS serverless platform where farmers upload agronomic files and receive processed outputs (management zones, yield data, satellite imagery, soil maps, terrain analysis).
-
-**Architecture:** React SPA → FastAPI Lambda (API Gateway) → AWS Batch Fargate jobs. Event-driven Lambdas handle file lifecycle, orchestration, and real-time WebSocket notifications.
-
-| Repo | Stack |
-|---|---|
-| api | Python 3.11, FastAPI, Mangum, AWS Lambda |
-| frontend-V2 | TypeScript, React 19, Vite 6, Node 20 |
-| tools-monorepo | Python 3.9/3.13, AWS Batch Fargate, GDAL/conda |
-| LambdaFunctions | Python 3.11/3.12, event-driven Lambdas |
-| ADAPT | C# .NET 8, AWS Batch |
-| dem_clipper | Python 3.12, GDAL, rasterio |
-| cloud-processing-stack | Terraform IaC |
-
-**AWS accounts:** Dev `342895721581` / Prod `359369607705` — both `us-east-2`
-**Full architecture reference:** set `SOILSERDEM_HUB` path in `core/context/personal.local.md`
-
-**Critical gotchas:**
-- GDAL must be installed via conda — pip install fails
-- `soilserdem-utils` must be installed before all other tools-monorepo packages
-- remote-sensing module uses Python 3.13 and excludes soilserdem-utils
-- API uses `id_token` as Bearer token (not `access_token`)
-- DynamoDB table names can be prefixed with `DYNAMODB_TABLE_PREFIX` (e.g. `test-` in CI)
-
-### toptal-zinc
-- **Stack:** Grails (Groovy), React
+Add workspace-specific projects in `core/context/personal.local.md` — this file is gitignored and stays on-device.
 
 ---
 

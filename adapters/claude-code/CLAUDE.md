@@ -55,7 +55,7 @@ Reference these when performing the relevant task:
 
 - Default: use the most capable available model for reasoning tasks
 - For fast, iterative tasks (file editing, search): use a faster model if available
-- [TODO: set your preferred model here once confirmed]
+- Default: `claude-sonnet-4-6`
 
 ---
 
