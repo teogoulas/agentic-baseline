@@ -38,7 +38,7 @@ if command -v claude &>/dev/null; then
   # GSD — shell-installable
   if command -v npx &>/dev/null; then
     echo "  Installing get-shit-done-cc..."
-    npx get-shit-done-cc --claude --global 2>&1 | sed 's/^/  /'
+    npx --yes get-shit-done-cc --claude --global 2>&1 | sed 's/^/  /'
   else
     echo "  Warning: npx not found — skipping get-shit-done-cc install"
     echo "  Install manually: npx get-shit-done-cc --claude --global"
