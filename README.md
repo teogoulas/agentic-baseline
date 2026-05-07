@@ -28,7 +28,7 @@ cp core/context/personal.md core/context/personal.local.md
 
 The repo has two layers:
 
-- **`/core`** — tool-agnostic skills, agent definitions, and context. Never mentions specific tools.
+- **`/core`** — tool-agnostic skills, one agent (tool-broker), and context. Never mentions specific tools.
   Any agent on any platform can read and use these files.
 - **`/adapters`** — thin wrappers per tool. Each adapter points its tool at `/core` and adds
   tool-specific config on top. Swapping tools means writing a new adapter, not touching core.
@@ -42,9 +42,9 @@ what tools are available, and what they're allowed to do before the first messag
 
 ```
 core/
-  skills/         Reusable skill files (code review, security audit, git, API design, etc.)
+  skills/         Reusable skill files (code review, security audit, git, API design, docs, etc.)
   context/        personal.md, permissions-default.md, tool-registry.md
-  agents/         Specialist agent definitions (orchestrator, reviewer, security-auditor, etc.)
+  agents/         tool-broker.md — manages tool and MCP lifecycle
 
 adapters/
   claude-code/    CLAUDE.md + install.sh
@@ -63,19 +63,20 @@ bootstrap.sh      Entry point — detects tools, runs relevant adapters
 
 ### `bootstrap.sh`
 
-The only script you run manually after cloning on a new machine.
+The entry point for new machine setup and updates. Always runs a full refresh — safe to re-run at any time.
 
 **What it does:**
 1. Detects which tools are installed (`claude`, `codex`, `gh copilot`)
-2. Runs the relevant `install.sh` for each detected tool — skips anything not installed
-3. Makes loop scripts executable
-4. Warns if `core/context/personal.md` still has unfilled TODOs
+2. Regenerates the config for each detected tool (backs up and overwrites existing)
+3. For Claude Code: runs `npx get-shit-done-cc --claude --global` and prints the `/plugin` install checklist
+4. Makes loop scripts executable
+5. Warns if `core/context/personal.md` still has unfilled TODOs
 
 ```bash
 ./bootstrap.sh
 ```
 
-Re-run any time you install a new tool and want its adapter set up.
+Re-run any time you install a new tool, move the repo, or want to pull in the latest adapter changes.
 
 ---
 
@@ -180,6 +181,23 @@ Append a summary to `update-loop/update-log.md`.
 
 Note: `baseline-snapshot.md` is auto-generated — it is listed in `.gitignore` and should not
 be committed or edited manually.
+
+---
+
+## Claude Code Plugins
+
+Five plugins extend Claude Code beyond what the baseline markdown files provide.
+`bootstrap.sh` handles GSD automatically. The rest are one-time installs per machine via a Claude Code session.
+
+| Plugin | Install | Activation |
+|---|---|---|
+| **GSD** | `npx get-shit-done-cc --claude --global` (auto via bootstrap) | Manual — `/gsd-*` commands for multi-session project workflow |
+| **Superpowers** | `/plugin install superpowers@claude-plugins-official` | Automatic — skills trigger based on task context |
+| **Skill Creator** | `/plugin install skill-creator@claude-plugins-official` | Manual — `/skill-creator` |
+| **Frontend Design** | `/plugin install frontend-design@claude-plugins-official` | Manual — `/frontend-design` |
+| **Context Mode** | `/plugin marketplace add mksglu/context-mode` then `/plugin install context-mode@context-mode` | Automatic — always-on context window optimisation via hooks |
+
+Once installed, plugins persist globally across all sessions and projects. Re-run the `/plugin install` commands in a Claude Code session to update them.
 
 ---
 

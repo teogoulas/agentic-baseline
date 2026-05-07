@@ -54,8 +54,17 @@ If a subtask needs a missing tool: surface it to tool-broker before routing.
 
 ### Step 5: Assign and Route
 
-Map each subtask to the correct specialist (see orchestrator routing table).
-State the execution order explicitly.
+Map each subtask to the relevant skill file and state the execution order explicitly.
+
+| Subtask type | Load skill |
+|---|---|
+| Code review | `core/skills/code-review.md` |
+| Security audit | `core/skills/security-audit.md` |
+| Documentation | `core/skills/docs.md` |
+| Git operations | `core/skills/git-workflow.md` |
+| API design | `core/skills/api-design.md` |
+| MCP server work | `core/skills/mcp-server.md` |
+| Tool/MCP gaps | `core/agents/tool-broker.md` |
 
 ---
 

@@ -32,11 +32,15 @@ At the start of every session, read these files:
 Reference these skill files when performing the relevant task:
 
 - Code review: `core/skills/code-review.md`
-- Security review: `core/skills/security-audit.md`, `core/skills/findings-format.md`
+- Security audit: `core/skills/security-audit.md`
 - Task breakdown: `core/skills/task-decomposition.md`
 - Git operations: `core/skills/git-workflow.md`
 - API design: `core/skills/api-design.md`
 - Docker: `core/skills/docker-local.md`
+- Context compression: `core/skills/context-compression.md`
+- MCP server: `core/skills/mcp-server.md`
+- Skill authoring: `core/skills/skill-creator/SKILL.md`
+- Documentation: `core/skills/docs.md`
 
 ---
 

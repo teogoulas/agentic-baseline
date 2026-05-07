@@ -8,6 +8,8 @@ echo "========================================"
 echo " Agentic Baseline — Bootstrap"
 echo "========================================"
 echo ""
+echo "Always runs a full refresh — re-run any time to update."
+echo ""
 
 detected=()
 skipped=()
@@ -28,6 +30,29 @@ run_adapter() {
 if command -v claude &>/dev/null; then
   echo "--- Claude Code detected ---"
   run_adapter "Claude Code" "$BASELINE_DIR/adapters/claude-code/install.sh"
+  echo ""
+
+  # Install plugins
+  echo "--- Claude Code plugins ---"
+
+  # GSD — shell-installable
+  if command -v npx &>/dev/null; then
+    echo "  Installing get-shit-done-cc..."
+    npx get-shit-done-cc --claude --global 2>&1 | sed 's/^/  /'
+  else
+    echo "  Warning: npx not found — skipping get-shit-done-cc install"
+    echo "  Install manually: npx get-shit-done-cc --claude --global"
+  fi
+
+  echo ""
+  echo "  The following plugins require a Claude Code session to install."
+  echo "  Run these commands in any Claude Code session (one-time, they persist globally):"
+  echo ""
+  echo "    /plugin install skill-creator@claude-plugins-official"
+  echo "    /plugin install superpowers@claude-plugins-official"
+  echo "    /plugin install frontend-design@claude-plugins-official"
+  echo "    /plugin marketplace add mksglu/context-mode"
+  echo "    /plugin install context-mode@context-mode"
   echo ""
 else
   skipped+=("Claude Code (not installed)")
@@ -61,12 +86,12 @@ echo "========================================"
 echo ""
 
 if [[ ${#detected[@]} -gt 0 ]]; then
-  echo "Installed adapters:"
+  echo "Refreshed adapters:"
   for t in "${detected[@]}"; do
     echo "  ✓ $t"
   done
 else
-  echo "No adapters installed (no supported tools detected)."
+  echo "No adapters refreshed (no supported tools detected)."
 fi
 
 echo ""

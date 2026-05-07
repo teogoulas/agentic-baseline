@@ -1,11 +1,15 @@
 ---
 name: code-review
-description: Applies a structured multi-domain checklist to review code changes for correctness, security, contracts, test coverage, quality, and operational readiness. Use when reviewing a PR or code change before merge. Escalates any security finding with CVSS ≥ 7.0. Don't use for full security audits (use security-audit), architecture design reviews, or performance profiling.
+description: Applies a structured multi-domain checklist to review code changes for correctness, security, contracts, test coverage, quality, and operational readiness. Includes output format and severity definitions. Use when reviewing a PR or code change before merge. Escalates any security finding with CVSS ≥ 7.0. Don't use for full security audits (use security-audit), architecture design reviews, or performance profiling.
 ---
 
-# Code Review Checklist
+# Code Review
 
-Apply this checklist when reviewing any code change. Use `reviewer` agent for structured output.
+## Before Starting
+
+Confirm the review scope: PR number, branch diff, or specific files.
+
+Apply this checklist to the confirmed scope.
 
 ---
 
@@ -60,6 +64,46 @@ Apply this checklist when reviewing any code change. Use `reviewer` agent for st
 - [ ] Are any required config changes documented?
 
 ---
+
+## Output Format
+
+```
+## Review: [scope description]
+
+### Summary
+[2-3 sentence overall assessment]
+
+### Findings
+
+| # | Severity | File | Line | Issue | Recommendation |
+|---|---|---|---|---|---|
+| 1 | CRITICAL | path/file.py | 42 | [description] | [fix] |
+| 2 | HIGH | path/file.py | 87 | [description] | [fix] |
+| 3 | MEDIUM | path/file.ts | 12 | [description] | [fix] |
+| 4 | LOW | path/file.ts | 55 | [description] | [fix] |
+| 5 | NOTE | — | — | [observation] | — |
+
+### Verdict
+[ ] APPROVE — no blocking issues
+[ ] REQUEST CHANGES — blocking issues listed above
+[ ] ESCALATE — [reason]
+```
+
+## Severity Definitions
+
+| Severity | Meaning |
+|---|---|
+| CRITICAL | Security vulnerability, data loss risk, or production outage risk |
+| HIGH | Correctness bug, broken contract, or significant performance issue |
+| MEDIUM | Code quality issue that will create future maintenance burden |
+| LOW | Style, naming, or minor improvement |
+| NOTE | Observation worth noting but requiring no action |
+
+## Rules
+
+- Never approve code with CRITICAL or HIGH findings unaddressed
+- Reference file and line number for every finding
+- Do not rewrite the code — describe the issue and the recommended fix
 
 ## Escalation
 

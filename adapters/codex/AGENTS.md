@@ -16,18 +16,10 @@ At the start of every session, read these files in order:
 
 ---
 
-## Agent Roles
-
-When asked to act as a specialist, load the relevant agent file:
+## Agent
 
 | Role | File |
 |---|---|
-| Orchestrate a complex task | `core/agents/orchestrator.md` |
-| Review code or a PR | `core/agents/reviewer.md` |
-| Security audit | `core/agents/security-auditor.md` |
-| Debug an issue | `core/agents/debugger.md` |
-| Write documentation | `core/agents/docs.md` |
-| Produce a report or summary | `core/agents/report.md` |
 | Tool/MCP gaps | `core/agents/tool-broker.md` |
 
 ---
@@ -43,6 +35,9 @@ When asked to act as a specialist, load the relevant agent file:
 | API design | `core/skills/api-design.md` |
 | Docker setup | `core/skills/docker-local.md` |
 | Context is getting large | `core/skills/context-compression.md` |
+| Building or extending an MCP server | `core/skills/mcp-server.md` |
+| Authoring or evaluating a skill | `core/skills/skill-creator/SKILL.md` |
+| Writing documentation | `core/skills/docs.md` |
 
 ---
 
