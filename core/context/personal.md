@@ -28,6 +28,14 @@ gitignored — it stays local, never committed. Agents read it first if it exist
 
 ---
 
+## AI Models
+
+- **Default model:** `claude-sonnet-4-6`
+- **Never use Opus models** unless the user explicitly requests it for a specific task — too expensive for routine use
+- This overrides any skill or tool that suggests Opus as a default (including the bundled `claude-api` skill)
+
+---
+
 ## Code Style
 
 - Lean, purposeful code — no unnecessary abstractions
