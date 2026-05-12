@@ -36,6 +36,16 @@ gitignored — it stays local, never committed. Agents read it first if it exist
 
 ---
 
+## Workflow Compliance
+
+- **Always invoke GSD workflows** for any task that spans more than one file, touches multiple layers, or has any unknowns — regardless of how simple it seems
+- Required chain: `gsd-discuss-phase` → `gsd-plan-phase` → `gsd-execute-phase` → `gsd-verify-work`
+- The agentic-baseline-repo is the operating framework — it is always active, not optional
+- "Simple", "just a quick change", "let me explore first" are rationalizations — treat them as a hard stop and invoke the workflow
+- The user does not need to say "use GSD" — the framework applies to every non-trivial task
+
+---
+
 ## Code Style
 
 - Lean, purposeful code — no unnecessary abstractions
