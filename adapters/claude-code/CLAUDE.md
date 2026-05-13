@@ -33,13 +33,10 @@ Reference these when performing the relevant task:
 | Task | Skill file |
 |---|---|
 | Building a new feature or project | `core/skills/development-lifecycle.md` |
-| Breaking down a large task | `core/skills/task-decomposition.md` |
 | Reviewing code | `core/skills/code-review.md` |
 | Security audit | `core/skills/security-audit.md` |
-| Git operations | `core/skills/git-workflow.md` |
 | API design | `core/skills/api-design.md` |
 | Docker setup | `core/skills/docker-local.md` |
-| Context is getting large | `core/skills/context-compression.md` |
 | Building or extending an MCP server | `core/skills/mcp-server.md` |
 | Authoring or evaluating a skill | `core/skills/skill-creator/SKILL.md` |
 | Writing documentation | `core/skills/docs.md` |
