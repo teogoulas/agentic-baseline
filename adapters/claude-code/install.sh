@@ -15,6 +15,47 @@ if ! command -v claude &>/dev/null; then
   exit 0
 fi
 
+# Check required plugins for the development lifecycle pipeline
+echo "  Checking required plugins..."
+PLUGINS_JSON="$GLOBAL_CLAUDE_DIR/plugins/installed_plugins.json"
+MISSING_PLUGINS=()
+
+check_plugin() {
+  local plugin_key="$1"
+  local plugin_name="$2"
+  if [[ -f "$PLUGINS_JSON" ]]; then
+    if ! node -e "const p=require('$PLUGINS_JSON'); process.exit(p.plugins && p.plugins['$plugin_key'] ? 0 : 1)" 2>/dev/null; then
+      MISSING_PLUGINS+=("$plugin_name")
+    fi
+  else
+    MISSING_PLUGINS+=("$plugin_name (plugins registry not found)")
+  fi
+}
+
+check_plugin "superpowers@claude-plugins-official" "superpowers"
+check_plugin "context-mode@context-mode" "context-mode"
+
+GSD_SKILL="$GLOBAL_CLAUDE_DIR/skills/gsd-plan-phase"
+if [[ ! -f "$GSD_SKILL" ]]; then
+  MISSING_PLUGINS+=("get-shit-done (GSD)")
+fi
+
+if [[ ${#MISSING_PLUGINS[@]} -gt 0 ]]; then
+  echo ""
+  echo "  ⚠️  Missing required plugins for the development lifecycle pipeline:"
+  for p in "${MISSING_PLUGINS[@]}"; do
+    echo "     - $p"
+  done
+  echo ""
+  echo "  Install missing plugins in Claude Code:"
+  echo "     superpowers:   /install superpowers"
+  echo "     context-mode:  /install context-mode"
+  echo "     GSD:           https://github.com/paukertomas/get-shit-done"
+  echo ""
+else
+  echo "  All required plugins present."
+fi
+
 # --- Global install (~/.claude/CLAUDE.md) ---
 # The global file uses absolute paths so it works in any project directory.
 # Generated from the adapter template with BASELINE_DIR substituted in.

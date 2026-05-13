@@ -32,6 +32,7 @@ Reference these when performing the relevant task:
 
 | Task | Skill file |
 |---|---|
+| Building a new feature or project | `core/skills/development-lifecycle.md` |
 | Breaking down a large task | `core/skills/task-decomposition.md` |
 | Reviewing code | `core/skills/code-review.md` |
 | Security audit | `core/skills/security-audit.md` |

@@ -16,7 +16,10 @@ A project-level config can only *restrict* these defaults, not expand them beyon
 | Install dependencies | From declared manifest files only (package.json, requirements.txt, pyproject.toml, etc.) |
 | Create git branches | Feature and fix branches only |
 | Create git commits | Feature and fix branches only |
+| Create and remove git worktrees | For parallel agent execution only |
 | Execute build commands | As defined in project scripts |
+| Run Docker containers | For local sandbox testing (docker-compose.test.yml) — no production environments |
+| Spawn subagents | For parallel task execution within a defined plan |
 | Generate drafts | Any — always presented for review before acting |
 | Read environment variables | Non-secret vars only |
 
