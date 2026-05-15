@@ -5,6 +5,20 @@ rather than duplicating it — keep tool-specific config here, keep logic in /co
 
 ---
 
+## Hard Rules (non-negotiable, always enforced)
+
+1. **Check for a skill first.** Before writing any code, making any edit, or starting any multi-step action — invoke the `Skill` tool to check for a relevant superpowers skill. Do this even for tasks that feel simple.
+
+2. **Never dump large output into context.** Any command that may produce more than 20 lines of output MUST go through `ctx_batch_execute` (context-mode), not raw Bash. This is not optional.
+
+3. **Use context-mode for all follow-up lookups.** After indexing, use `ctx_search` for queries and `ctx_execute_file` for log/output analysis. Never re-run a Bash command to answer a question already indexed.
+
+4. **`Read` is only for files you are about to `Edit`.** For analysis or exploration, use `ctx_execute_file` or `ctx_batch_execute`.
+
+Violations of rules 2–4 silently destroy context budget and cause compaction mid-task. Rule 1 violations cause repeated mistakes across sessions.
+
+---
+
 ## Session Start — Required Reading
 
 At the start of every session, read these files in order:

@@ -18,6 +18,8 @@ Only the tool-broker updates this file. Do not edit manually.
 
 | Server | Capabilities | Last Verified |
 |---|---|---|
+| context-mode | Token-efficient batch execution (`ctx_batch_execute`), FTS search (`ctx_search`), output analysis (`ctx_execute_file`) — keeps large output out of context | 2026-05-15 |
+| superpowers | Skills for coding best practices: TDD, debugging, parallel dispatch, review, git worktrees — invoke via `Skill()` tool | 2026-05-15 |
 | Google Calendar | Read/write calendar events, check availability, schedule meetings | 2026-05-04 |
 | ClickUp | Create/update tasks, read projects and spaces, manage task status | 2026-05-04 |
 | Google Drive | Read/write files, search documents, manage folders | 2026-05-04 |
@@ -38,6 +40,10 @@ Use this to answer "what can I use for X?" without reading every entry above.
 | Send a team notification | Slack |
 | Send an email | Gmail |
 | Code editing or file operations | Claude Code |
+| Run a command with >20 lines of output | `ctx_batch_execute` (context-mode) |
+| Search indexed results or prior session data | `ctx_search` (context-mode) |
+| Analyze logs, test output, large files | `ctx_execute_file` (context-mode) |
+| Apply best-practice coding workflow | `Skill()` (superpowers) |
 
 ---
 
