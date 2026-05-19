@@ -84,6 +84,37 @@ echo "  Generated ~/.claude/CLAUDE.md with absolute paths to $BASELINE_DIR"
 cp "$ADAPTER_DIR/CLAUDE.md" "$BASELINE_DIR/CLAUDE.md"
 echo "  Regenerated CLAUDE.md at baseline repo root (relative paths)"
 
+# --- Hooks ---
+HOOKS_DIR="$GLOBAL_CLAUDE_DIR/hooks"
+mkdir -p "$HOOKS_DIR"
+
+GUARD_HOOK="$HOOKS_DIR/ctx-mode-bash-guard.sh"
+cp "$ADAPTER_DIR/hooks/ctx-mode-bash-guard.sh" "$GUARD_HOOK"
+chmod +x "$GUARD_HOOK"
+echo "  Installed hook: ctx-mode-bash-guard.sh → $GUARD_HOOK"
+
+# --- settings.json: register ctx-mode-bash-guard hook (idempotent) ---
+SETTINGS_JSON="$GLOBAL_CLAUDE_DIR/settings.json"
+HOOK_COMMAND="bash \"$GUARD_HOOK\""
+
+if [[ ! -f "$SETTINGS_JSON" ]]; then
+  echo '{}' > "$SETTINGS_JSON"
+fi
+
+if jq -e --arg cmd "$HOOK_COMMAND" \
+  '.hooks.PreToolUse[]? | select(.matcher == "Bash") | .hooks[]? | select(.command == $cmd)' \
+  "$SETTINGS_JSON" > /dev/null 2>&1; then
+  echo "  ctx-mode-bash-guard already registered in settings.json (skipped)"
+else
+  TMP=$(mktemp)
+  jq --arg cmd "$HOOK_COMMAND" '
+    .hooks //= {} |
+    .hooks.PreToolUse //= [] |
+    .hooks.PreToolUse += [{"matcher":"Bash","hooks":[{"type":"command","command":$cmd,"timeout":5}]}]
+  ' "$SETTINGS_JSON" > "$TMP" && mv "$TMP" "$SETTINGS_JSON"
+  echo "  Registered ctx-mode-bash-guard in ~/.claude/settings.json"
+fi
+
 echo ""
 echo "  Claude Code adapter installed."
 echo ""
