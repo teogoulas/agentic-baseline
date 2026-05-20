@@ -53,6 +53,28 @@ Tier 1 and Tier 2 require no new artifacts. Tier 3 activates the EDD loop.
 
 ---
 
+## Enforcement Model
+
+The workflow is hybrid — instructions where judgment is needed, scripts where reliable
+computation is required.
+
+| Concern | Implementation | Why |
+|---|---|---|
+| Loop logic, checkpoints, phase scoping | Markdown skills (agent reads) | Requires judgment — depth scaling, hypothesis quality, human interaction |
+| Metric measurement | Shell script (`run-metric.sh`) | Must be deterministic and reproducible — agent must not reason about this |
+| Stop condition evaluation | Shell script (`check-stop.sh`) | Outputs `STOP` or `CONTINUE` + reason — agent reads result, does not compute it |
+| Artifact scaffolding | Shell script (`init-eval.sh`) | Ensures EVAL.md and LOOP-LOG.md are created with correct structure |
+| LOOP-LOG append | Shell script (`append-loop-log.sh`) | Ensures row format is consistent across iterations |
+
+Scripts live in `core/scripts/`. They are adapter-agnostic — any agent with shell access
+invokes them via Bash. No adapter-specific code required.
+
+The agent reads `edd-loop.md` for what to do and when. The agent invokes scripts for anything
+that requires reliable output. This is the autoresearch pattern: `program.md` is the
+instruction layer, the training run is the computation layer.
+
+---
+
 ## Architecture
 
 ```
@@ -86,19 +108,21 @@ Tier 1 and Tier 2 require no new artifacts. Tier 3 activates the EDD loop.
    gsd-explore (if idea is vague) → superpowers:brainstorming
    Output: design doc with success criteria + ## Methodology Tier = 3
 
-2. SCAFFOLD EVAL.md
+2. SCAFFOLD EVAL.md + LOOP-LOG.md
    Extract success criteria from brainstorm design doc.
-   Populate: metric, target, stop criteria.
+   Run: bash core/scripts/init-eval.sh
+   Fill in: metric name, definition, how-to-run command, target, stop criteria.
    Baseline field: TBD until first measurement.
 
 3. MEASURE BASELINE
-   Run: command defined in EVAL.md "How to run" (must be a shell command).
-   Populate EVAL.md baseline field.
-   If metric runner fails → immediate human checkpoint:
+   Run: bash core/scripts/run-metric.sh
+   Output: single numeric value → populate EVAL.md baseline field.
+   If script exits non-zero → immediate human checkpoint:
      redefine metric or downgrade to Tier 2.
 
-4. INIT LOOP-LOG.md
-   Row 0: baseline value, date, context.
+4. INIT LOOP-LOG row 0
+   Run: bash core/scripts/append-loop-log.sh 0 "baseline" "-" "<value>" "-" "-" "-"
+   Row 0 committed to LOOP-LOG.md.
 ```
 
 ### Per-iteration — repeats until loop exits
@@ -131,17 +155,21 @@ Tier 1 and Tier 2 require no new artifacts. Tier 3 activates the EDD loop.
    Partial implementations do not produce measurements.
 
 6. MEASURE
-   Run shell command from EVAL.md "How to run".
+   Run: bash core/scripts/run-metric.sh
+   Output: single numeric value (metric_after).
    delta = metric_after − metric_before.
-   Append row to LOOP-LOG.md:
-     iteration, hypothesis, before, after, delta, conditions hit, decision, date.
-   Sync EVAL.md Current State.
+   Run: bash core/scripts/append-loop-log.sh \
+          <N> "<hypothesis>" <before> <after> <delta> "<conditions>" "TBD"
+   Run: bash core/scripts/check-stop.sh
+   Output: STOP <reasons> or CONTINUE.
 
-7. STOP CHECK — any condition triggers human checkpoint
+7. STOP CHECK — output of check-stop.sh drives this step
+   Script evaluates against EVAL.md stop criteria and LOOP-LOG history:
    □ Time box:            total elapsed > time_box?
-   □ Target:              metric >= target_threshold?
+   □ Target:              metric_after >= target_threshold?
    □ Diminishing returns: |delta| < delta_threshold
                           for stagnation_count consecutive iterations?
+   Any condition true → script outputs STOP + which conditions triggered.
 
 8. HUMAN CHECKPOINT
    Present:
@@ -262,12 +290,16 @@ Appended to standard GSD PLAN.md format:
 
 ### What is new
 
-| File | Purpose |
-|---|---|
-| `core/skills/edd-loop.md` | Orchestrates the full EDD iteration loop |
-| `core/templates/EVAL.md` | Scaffold template for new projects |
-| `core/templates/LOOP-LOG.md` | Scaffold template for new projects |
-| `core/context/methodology-guide.md` | Three-tier reference doc — routing, layers, tools |
+| File | Type | Purpose |
+|---|---|---|
+| `core/skills/edd-loop.md` | Skill (instructions) | Orchestrates the full EDD iteration loop |
+| `core/templates/EVAL.md` | Template | Scaffold for new projects |
+| `core/templates/LOOP-LOG.md` | Template | Scaffold for new projects |
+| `core/context/methodology-guide.md` | Reference doc | Three-tier model — routing, layers, tools |
+| `core/scripts/run-metric.sh` | Script | Reads EVAL.md "How to run", executes it, outputs single numeric value |
+| `core/scripts/check-stop.sh` | Script | Reads EVAL.md stop criteria + LOOP-LOG history, outputs `STOP <reasons>` or `CONTINUE` |
+| `core/scripts/init-eval.sh` | Script | Scaffolds EVAL.md + LOOP-LOG.md from templates into `.planning/` |
+| `core/scripts/append-loop-log.sh` | Script | Appends one row to LOOP-LOG.md with correct markdown table formatting |
 
 ### What does not change
 
@@ -305,22 +337,30 @@ Appended to standard GSD PLAN.md format:
 
 ## Implementation Scope
 
-**4 new files, 1 modified file.**
+**8 new files, 1 modified file.**
 
 ```
 core/
   context/
-    methodology-guide.md        ← NEW
+    methodology-guide.md        ← NEW (reference doc)
   skills/
-    edd-loop.md                 ← NEW
+    edd-loop.md                 ← NEW (skill — instructions)
     development-lifecycle.md    ← MODIFIED (tier routing + Tier 3 wrapper)
   templates/                    ← NEW DIRECTORY
-    EVAL.md                     ← NEW
-    LOOP-LOG.md                 ← NEW
+    EVAL.md                     ← NEW (template)
+    LOOP-LOG.md                 ← NEW (template)
+  scripts/                      ← NEW DIRECTORY
+    run-metric.sh               ← NEW (executes project metric command)
+    check-stop.sh               ← NEW (evaluates stop conditions, outputs STOP/CONTINUE)
+    init-eval.sh                ← NEW (scaffolds .planning/EVAL.md + LOOP-LOG.md)
+    append-loop-log.sh          ← NEW (appends one row to LOOP-LOG.md)
 ```
 
 GSD plugin skills are not modified. `edd-loop.md` wraps GSD calls from outside, injecting
 EDD context before and after each GSD command. GSD behavior is unchanged.
+
+Scripts are adapter-agnostic — any agent with shell access invokes them via Bash.
+No adapter-specific code. Works with Claude Code, Copilot CLI, or any shell-capable agent.
 
 ---
 
