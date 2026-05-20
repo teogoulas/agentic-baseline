@@ -28,6 +28,20 @@ Outputs captured to: `.planning/notes/`, `.planning/todos/pending/`
 
 ---
 
+## Tier Routing
+
+Immediately after Stage 1, read the brainstorm design doc for `## Methodology Tier`.
+
+| Tier | Condition | Action |
+|---|---|---|
+| 1 | Binary correctness, small scope | `Skill("superpowers:test-driven-development")` — skip to Stage 5 when done |
+| 2 | Binary correctness, large scope | Continue to Stage 2 (standard SDD flow) |
+| 3 | Fuzzy correctness or iterative | `Skill("edd-loop")` — edd-loop wraps Stages 2–4 per iteration |
+
+If `## Methodology Tier` is not present in the design doc: ask the user before proceeding.
+
+---
+
 ## Stage 2 — Plan
 
 Goal: produce a PLAN.md the user approves before anything executes.
@@ -77,6 +91,9 @@ For TDD discipline during implementation:
 Skill("superpowers:test-driven-development")
 ```
 
+**Tier 3 note:** TDD runs exactly as in Tier 1/2. `edd-loop.md` measures the metric after
+`gsd-validate-phase` passes — no change to the TDD cycle itself.
+
 For resuming after a context reset or session pause:
 ```
 Skill("superpowers:executing-plans")
@@ -117,6 +134,9 @@ Security check:
 ```
 /gsd-secure-phase {N}
 ```
+
+**Tier 3 note:** After validation passes, return to `edd-loop.md` Step 6 (Measure).
+Do not proceed to Stage 5 until the EDD loop exits.
 
 **Context rule:** Use `ctx_execute_file` to read test output, coverage reports, and review findings. Never dump raw output into context.
 
