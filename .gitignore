@@ -3,6 +3,10 @@ update-loop/baseline-snapshot.md
 CLAUDE.md
 AGENTS.md
 
+# Session artifacts — never commit
+docs/superpowers/
+.planning/
+
 # Local environment — never commit
 .env
 .env.local

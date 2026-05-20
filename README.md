@@ -38,13 +38,41 @@ what tools are available, and what they're allowed to do before the first messag
 
 ---
 
+## Development Methodology Stack
+
+Three methodologies are coordinated as a stack, not alternatives:
+
+| Layer | Tool | Answers |
+|---|---|---|
+| **EDD** (outermost) | `core/skills/edd-loop.md` + EVAL.md | *What are we optimizing and are we done?* |
+| **SDD** (middle) | GSD (`/gsd-*` commands) | *What are we building this iteration and in what scope?* |
+| **TDD** (innermost) | Superpowers | *Is this unit correct and does it move the metric?* |
+
+**Tier routing** — selected at brainstorm time, recorded in the design doc under `## Methodology Tier`:
+
+| Tier | When | Workflow |
+|---|---|---|
+| 1 | Binary correctness, small scope | TDD only |
+| 2 | Binary correctness, large/multi-session scope | TDD + SDD |
+| 3 | Fuzzy correctness or iterative discovery | TDD + SDD + EDD loop |
+
+See `core/context/methodology-guide.md` for routing questions and `core/skills/edd-loop.md` for the full Tier 3 loop.
+
+---
+
 ## Repository Structure
 
 ```
 core/
   skills/         Reusable skill files (code review, security audit, git, API design, docs, etc.)
+                  edd-loop.md — EDD iteration loop orchestration (Tier 3)
+                  development-lifecycle.md — methodology tier routing + full dev workflow
   context/        personal.md, permissions-default.md, tool-registry.md
+                  methodology-guide.md — three-tier model reference and routing questions
   agents/         tool-broker.md — manages tool and MCP lifecycle
+  templates/      EVAL.md, LOOP-LOG.md — scaffolds for EDD projects
+  scripts/        init-eval.sh, run-metric.sh, append-loop-log.sh, check-stop.py
+                  tests/ — test suite for all scripts
 
 adapters/
   claude-code/    CLAUDE.md + install.sh
@@ -128,6 +156,24 @@ Copilot does not support a global config file, so per-project setup is manual.
 
 ```bash
 ./adapters/copilot/install.sh
+```
+
+---
+
+### `core/scripts/` — EDD Loop Scripts
+
+Four scripts that provide deterministic computation for the EDD loop. Agents invoke them via Bash; agents do not compute these values themselves.
+
+| Script | What it does |
+|---|---|
+| `init-eval.sh` | Scaffolds `.planning/EVAL.md` and `.planning/LOOP-LOG.md` from templates. Set `FORCE=1` to overwrite existing files. |
+| `run-metric.sh` | Reads the `**How to run:**` field from `EVAL.md`, executes it, validates the output is numeric, prints the result. |
+| `append-loop-log.sh` | Appends one formatted markdown table row to `LOOP-LOG.md`. Args: `<iteration> <hypothesis> <before> <after> <delta> <conditions> <decision>` |
+| `check-stop.py` | Evaluates three stop conditions (time box, target reached, diminishing returns) against `EVAL.md` and `LOOP-LOG.md`. Outputs `STOP <reasons>` or `CONTINUE`. |
+
+Run the test suite:
+```bash
+bash core/scripts/tests/run_all.sh
 ```
 
 ---
