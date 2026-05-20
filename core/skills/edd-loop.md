@@ -12,25 +12,24 @@ Run these steps before the first iteration.
 **1. Confirm EVAL.md exists and baseline is populated.**
 
 If `.planning/EVAL.md` does not exist:
-```bash
-bash core/scripts/init-eval.sh
-```
+- Read `core/templates/EVAL.md`, write its contents to `.planning/EVAL.md`
+- Read `core/templates/LOOP-LOG.md`, write its contents to `.planning/LOOP-LOG.md`
+
 Open `.planning/EVAL.md` and fill in all fields. The `**Baseline**` value is TBD at this stage.
 
 **2. Measure baseline.**
 
-```bash
-bash core/scripts/run-metric.sh
-```
-
-If `run-metric.sh` exits non-zero: stop. Ask the user to redefine the metric or downgrade to Tier 2.
+- Read `.planning/EVAL.md`, find the line starting with `**How to run:**`, extract the command
+- Run the command via Bash
+- Verify the output is a single numeric value (integer or decimal). If it is not, stop — ask the user to fix the metric command in EVAL.md or downgrade to Tier 2.
 
 Record the output value in `.planning/EVAL.md` under `**Baseline > Value:**` and `**Current State > Value:**`.
 
 **3. Append baseline row to LOOP-LOG.md.**
 
-```bash
-bash core/scripts/append-loop-log.sh 0 "baseline" "—" "<baseline_value>" "—" "—" "—"
+Append this line to `.planning/LOOP-LOG.md`:
+```
+| 0 | baseline | — | <baseline_value> | — | — | — | <YYYY-MM-DD> |
 ```
 
 ---
@@ -109,16 +108,15 @@ A failing test suite never produces a LOOP-LOG entry.
 
 ### Step 6 — Measure
 
-```bash
-bash core/scripts/run-metric.sh
-```
+- Read `.planning/EVAL.md`, find the line starting with `**How to run:**`, extract the command
+- Run the command via Bash
+- Verify the output is a single numeric value. If not, stop — ask the user to fix the metric command.
 
 Record the output as `metric_after`. Compute `delta = metric_after − metric_before`.
 
-Append to LOOP-LOG (replace placeholders):
-```bash
-bash core/scripts/append-loop-log.sh \
-  <N> "<hypothesis>" <metric_before> <metric_after> <delta> "TBD" "TBD"
+Append to `.planning/LOOP-LOG.md`:
+```
+| <N> | <hypothesis> | <metric_before> | <metric_after> | <delta> | TBD | TBD | <YYYY-MM-DD> |
 ```
 
 Update `.planning/EVAL.md` Current State:
@@ -187,7 +185,7 @@ Then:
 
 | Situation | Action |
 |---|---|
-| `run-metric.sh` exits non-zero | Stop. Ask user to fix the metric command in EVAL.md or downgrade to Tier 2. |
+| Metric command fails or output is non-numeric | Stop. Ask user to fix the `**How to run:**` field in EVAL.md or downgrade to Tier 2. |
 | `check-stop.py` exits non-zero | Stop. Check EVAL.md fields are all populated. |
 | Validation fails (gsd-validate-phase) | Fix failing tests. Do not measure. Do not append LOOP-LOG. |
 | Human decides to exit mid-iteration | Record decision in LOOP-LOG. Proceed to post-loop from current state. |

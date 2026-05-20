@@ -71,8 +71,8 @@ core/
                   methodology-guide.md — three-tier model reference and routing questions
   agents/         tool-broker.md — manages tool and MCP lifecycle
   templates/      EVAL.md, LOOP-LOG.md — scaffolds for EDD projects
-  scripts/        init-eval.sh, run-metric.sh, append-loop-log.sh, check-stop.py
-                  tests/ — test suite for all scripts
+  scripts/        check-stop.py — stop condition evaluator (deterministic; not delegated to agent)
+                  tests/test_check_stop.py — test suite
 
 adapters/
   claude-code/    CLAUDE.md + install.sh
@@ -160,21 +160,22 @@ Copilot does not support a global config file, so per-project setup is manual.
 
 ---
 
-### `core/scripts/` — EDD Loop Scripts
+### `core/scripts/check-stop.py`
 
-Four scripts that provide deterministic computation for the EDD loop. Agents invoke them via Bash; agents do not compute these values themselves.
+The only computation the EDD loop cannot safely delegate to an agent. Evaluates three stop conditions (time box elapsed, target threshold reached, diminishing returns over N consecutive iterations) against `.planning/EVAL.md` and `.planning/LOOP-LOG.md`. Outputs `CONTINUE` or `STOP` followed by which conditions triggered.
 
-| Script | What it does |
-|---|---|
-| `init-eval.sh` | Scaffolds `.planning/EVAL.md` and `.planning/LOOP-LOG.md` from templates. Set `FORCE=1` to overwrite existing files. |
-| `run-metric.sh` | Reads the `**How to run:**` field from `EVAL.md`, executes it, validates the output is numeric, prints the result. |
-| `append-loop-log.sh` | Appends one formatted markdown table row to `LOOP-LOG.md`. Args: `<iteration> <hypothesis> <before> <after> <delta> <conditions> <decision>` |
-| `check-stop.py` | Evaluates three stop conditions (time box, target reached, diminishing returns) against `EVAL.md` and `LOOP-LOG.md`. Outputs `STOP <reasons>` or `CONTINUE`. |
-
-Run the test suite:
 ```bash
-bash core/scripts/tests/run_all.sh
+python3 core/scripts/check-stop.py
+# Override paths:
+EVAL_FILE=.planning/EVAL.md LOG_FILE=.planning/LOOP-LOG.md python3 core/scripts/check-stop.py
 ```
+
+Run its tests:
+```bash
+python3 core/scripts/tests/test_check_stop.py
+```
+
+All other EDD loop operations (scaffolding EVAL.md, running the metric command, appending LOOP-LOG rows) are handled directly by the agent as instructions in `core/skills/edd-loop.md`.
 
 ---
 
