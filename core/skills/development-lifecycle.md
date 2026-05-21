@@ -1,44 +1,49 @@
 ---
 name: development-lifecycle
-description: Standard 6-stage pipeline for building any feature or project — brainstorm, plan (human approval gate), parallel multi-agent execution, validate, full test suite + sandbox, ship. Explicitly invokes GSD, superpowers, and context-mode tools at each stage. Use when starting any non-trivial feature, task, or project regardless of type (web app, API, CLI, library).
+description: Entry point for all new projects and features. Read this BEFORE invoking any other skill. Orchestrates tier routing after brainstorm — routes Tier 1 to the superpowers stack, Tier 2 to GSD phases, Tier 3 to the EDD loop. Do not invoke superpowers:brainstorming directly; this file invokes it for you.
 ---
 
 # Development Lifecycle
 
-Six-stage pipeline for building any feature or project. Superpowers skills are invoked explicitly at each stage — no reliance on auto-detection. GSD commands drive the lifecycle. context-mode tools manage token consumption throughout.
+**Read this first.** This is the orchestrator for all new projects and features. It invokes brainstorming, determines the methodology tier, then routes to the right execution path. Do not jump straight to `superpowers:brainstorming` — start here.
+
+Six-stage pipeline applies to Tier 2 and Tier 3. Tier 1 exits after Stage 1 and follows the superpowers stack directly.
 
 ---
 
 ## Stage 1 — Brainstorm
 
-Goal: crystallize the idea before committing to a plan.
+Goal: crystallize the idea and determine the methodology tier before committing to a plan.
 
-```
-/gsd-explore {feature or idea}
-```
-
-For ideas that benefit from visual mapping:
 ```
 Skill("superpowers:brainstorming")
 ```
 
-**Context rule:** Use `ctx_batch_execute` for all codebase exploration during brainstorm. Never dump raw file contents into context.
+**Routing step — mandatory, before writing the final spec:**
 
-Outputs captured to: `.planning/notes/`, `.planning/todos/pending/`
+Ask the user the two routing questions from `core/context/methodology-guide.md`:
+1. *Is "correct" binary and fully pre-specifiable?*
+2. *Will this genuinely need multiple sessions?*
+
+Record the answer as `## Methodology Tier: [1/2/3]` in the design doc before committing the spec.
+
+**Context rule:** Use `ctx_batch_execute` for all codebase exploration during brainstorm. Never dump raw file contents into context.
 
 ---
 
 ## Tier Routing
 
-Immediately after Stage 1, read the brainstorm design doc for `## Methodology Tier`.
+Immediately after Stage 1, read `## Methodology Tier` from the design doc and route:
 
 | Tier | Condition | Action |
 |---|---|---|
-| 1 | Binary correctness, small scope | `Skill("superpowers:test-driven-development")` — skip to Stage 5 when done |
-| 2 | Binary correctness, large scope | Continue to Stage 2 (standard SDD flow) |
-| 3 | Fuzzy correctness or iterative | `Skill("edd-loop")` — edd-loop wraps Stages 2–4 per iteration |
+| **1** | Binary correctness, fits in one session | `Skill("superpowers:writing-plans")` → `Skill("superpowers:subagent-driven-development")` → `Skill("superpowers:finishing-a-development-branch")` |
+| **2** | Binary correctness, genuinely multi-session | Continue to Stage 2 (GSD flow) |
+| **3** | Fuzzy correctness or iterative | `Skill("edd-loop")` — edd-loop wraps Stages 2–4 per iteration |
 
 If `## Methodology Tier` is not present in the design doc: ask the user before proceeding.
+
+**Tier 1 exits here.** Do not proceed to Stage 2 for Tier 1 projects.
 
 ---
 

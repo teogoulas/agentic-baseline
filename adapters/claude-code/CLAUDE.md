@@ -46,7 +46,7 @@ Reference these when performing the relevant task:
 
 | Task | Skill file |
 |---|---|
-| Building a new feature or project | `core/skills/development-lifecycle.md` |
+| Building a new feature or project | `core/skills/development-lifecycle.md` — **read this first, it is the orchestrator; do not invoke `superpowers:brainstorming` directly** |
 | Reviewing code | `core/skills/code-review.md` |
 | Security audit | `core/skills/security-audit.md` |
 | API design | `core/skills/api-design.md` |

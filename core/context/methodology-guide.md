@@ -29,33 +29,36 @@ the design doc under `## Methodology Tier`. `development-lifecycle.md` reads thi
 **Two routing questions:**
 
 1. *Is "correct" binary and fully pre-specifiable — do tests cover it completely?*
-2. *Is scope large enough to risk context rot across sessions?*
+2. *Will this genuinely need multiple sessions?*
 
 | Q1 | Q2 | Tier | Workflow |
 |---|---|---|---|
-| Yes | No — small, one session | **1** | TDD only (`superpowers:test-driven-development`) |
-| Yes | Yes — large or multi-session | **2** | TDD + SDD (standard GSD flow) |
-| No — fuzzy or discovered | Any | **3** | TDD + SDD + EDD loop (`edd-loop.md`) |
+| Yes | No — fits in one session | **1** | superpowers stack (brainstorm → writing-plans → subagent-driven-development) |
+| Yes | Yes — genuinely multi-session | **2** | TDD + GSD phases |
+| No — fuzzy or discovered | Any | **3** | TDD + GSD + EDD loop (`edd-loop.md`) |
+
+**Key insight:** For single-session work, `subagent-driven-development` provides context isolation via fresh subagents per task — GSD phases add overhead without benefit. GSD is only needed when work genuinely spans multiple sessions and PLAN.md needs to survive a context reset.
 
 When in doubt between Tier 2 and Tier 3: ask "will I know I'm done before I start?" If yes → Tier 2. If no → Tier 3.
+When in doubt between Tier 1 and Tier 2: ask "can I finish this in one session?" If yes → Tier 1.
 
 ---
 
-## Tier 1 — TDD only
+## Tier 1 — superpowers stack (one session)
 
-Simple, self-contained. Correct is obvious upfront. One session.
+Correct is fully pre-specifiable, fits in one session. Subagent-driven-development provides context isolation — no GSD phases needed.
 
 ```
-superpowers:test-driven-development → red → green → refactor → done
+superpowers:brainstorming → superpowers:writing-plans → superpowers:subagent-driven-development → superpowers:finishing-a-development-branch
 ```
 
-No EVAL.md. No PLAN.md. No loop. `gsd-quick` for commit scaffold if needed.
+TDD discipline applies inside each subagent task: red → green → refactor. No EVAL.md. No PLAN.md. No GSD phases.
 
 ---
 
-## Tier 2 — TDD + SDD
+## Tier 2 — TDD + GSD (genuinely multi-session)
 
-Larger scope, multi-session, correctness is binary. Context isolation needed, metric adds no value.
+Correctness is binary but work genuinely spans multiple sessions. PLAN.md survives context resets. GSD phase boundaries provide human checkpoints and resumability.
 
 ```
 gsd-discuss-phase → gsd-plan-phase → gsd-execute-phase (TDD inside) → gsd-validate-phase → gsd-ship
@@ -75,11 +78,10 @@ all feed into a human checkpoint — no automatic stops.
 superpowers:brainstorming → EVAL.md → edd-loop.md (wraps GSD + TDD per iteration) → gsd-ship
 ```
 
-Scripts handle all deterministic computation:
-- `core/scripts/run-metric.sh` — executes the project metric command
+One script handles deterministic computation; agent instructions handle everything else:
 - `core/scripts/check-stop.py` — evaluates stop conditions, outputs STOP/CONTINUE
-- `core/scripts/init-eval.sh` — scaffolds `.planning/EVAL.md` + `.planning/LOOP-LOG.md`
-- `core/scripts/append-loop-log.sh` — appends one row to `.planning/LOOP-LOG.md`
+
+All other EDD operations (scaffolding EVAL.md, running the metric, appending LOOP-LOG rows) are agent instructions in `core/skills/edd-loop.md`.
 
 ---
 
