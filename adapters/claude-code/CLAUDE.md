@@ -42,9 +42,9 @@ If a project-level `permissions.md` exists in the project root, read that too �
 
 ## Skills
 
-Reference these when performing the relevant task:
+These are markdown files to **read directly** — not plugins. Use the `Skill` tool only for `superpowers:*` and `gsd:*` plugins. Invoking `Skill("development-lifecycle")` will error.
 
-| Task | Skill file |
+| Task | File to read |
 |---|---|
 | Building a new feature or project | `core/skills/development-lifecycle.md` — **read this first, it is the orchestrator; do not invoke `superpowers:brainstorming` directly** |
 | Reviewing code | `core/skills/code-review.md` |

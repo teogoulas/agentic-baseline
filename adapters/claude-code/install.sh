@@ -36,7 +36,7 @@ check_plugin "superpowers@claude-plugins-official" "superpowers"
 check_plugin "context-mode@context-mode" "context-mode"
 
 GSD_SKILL="$GLOBAL_CLAUDE_DIR/skills/gsd-plan-phase"
-if [[ ! -f "$GSD_SKILL" ]]; then
+if [[ ! -e "$GSD_SKILL" ]]; then
   MISSING_PLUGINS+=("get-shit-done (GSD)")
 fi
 
@@ -66,6 +66,13 @@ if [[ -f "$GLOBAL_CLAUDE_MD" && ! -L "$GLOBAL_CLAUDE_MD" ]]; then
   BACKUP="$GLOBAL_CLAUDE_MD.bak.$(date +%Y%m%d%H%M%S)"
   cp "$GLOBAL_CLAUDE_MD" "$BACKUP"
   echo "  Backed up existing ~/.claude/CLAUDE.md to $(basename "$BACKUP")"
+  # Keep only the 3 most recent backups
+  KEEP=3
+  mapfile -t OLD_BACKUPS < <(ls -1t "${GLOBAL_CLAUDE_MD}".bak.* 2>/dev/null | tail -n +$((KEEP + 1)))
+  for f in "${OLD_BACKUPS[@]}"; do
+    rm -f "$f"
+    echo "  Removed old backup: $(basename "$f")"
+  done
 fi
 
 {
